@@ -7,6 +7,9 @@ const brand = {
   900: '#1a202c',
 };
 const overrides = {
+  useSystemColorMode: false,
+  initialColorMode: 'dark',
+  cssVarPrefix: 'chakra',
   components: {
     Button: {
       baseStyle: {

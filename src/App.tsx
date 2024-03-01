@@ -4,7 +4,6 @@ import AccountSelector from './app/features/account/AccountSelector';
 import Transfer from './app/features/transactions/Transfer';
 import { StackDivider, VStack } from '@chakra-ui/react';
 import { Heading } from '@chakra-ui/react';
-
 function App() {
   return (
     <>

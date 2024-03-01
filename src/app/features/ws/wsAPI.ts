@@ -15,17 +15,16 @@ const initializeApi = async () => {
      *
      */
     const chainInfo = await api.registry.getChainProperties();
-    log.info(`[ws]chainInfo ${chainInfo}`);
+    log.info(`[ws] connected to chain. chain info: ${chainInfo}`);
   }
   return api;
 };
 
-const disconnect = async () => {
-  await api.disconnect();
-  log.info('\n Disconnected from the wsAPI');
-};
-
 const wsAPI = {
+  disconnect: async () => {
+    await api.disconnect();
+    log.info('\n Disconnected from the wsAPI');
+  },
   fetchAccountBalance: async (accountAddress: string) => {
     try {
       let { data } = (await api.query.system.account(accountAddress)) as any;
@@ -90,4 +89,4 @@ const wsAPI = {
   },
 };
 
-export { wsAPI, disconnect, initializeApi };
+export { wsAPI, initializeApi };
