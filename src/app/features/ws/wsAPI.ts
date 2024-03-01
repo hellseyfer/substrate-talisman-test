@@ -3,22 +3,24 @@ import { toDecimal, toPlanckUnit } from '../../utils/unitConversion';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import log from 'loglevel';
 
-export const blockchainBaseUrl = 'wss://westend-rpc.polkadot.io';
-const provider = new WsProvider(blockchainBaseUrl);
+export const WS_URL = import.meta.env.VITE_WS_URL;
+const provider = new WsProvider(WS_URL);
 
-let apiInstance: ApiPromise;
+let api: ApiPromise;
 export const initializeApi = async () => {
-  if (!apiInstance) {
-    apiInstance = await ApiPromise.create({ provider });
-    log.info('[Polkadot API] initialized');
+  if (!api) {
+    api = await ApiPromise.create({ provider });
+    /**
+     *  1. fetch the chain information
+     *
+     */
+    const chainInfo = await api.registry.getChainProperties();
+    log.info(`[ws]chainInfo ${chainInfo}`);
   }
-  return apiInstance;
+  return api;
 };
 
-// userAPI.js
-const api = await initializeApi();
-
-const polkadotAPI = {
+const wsAPI = {
   fetchAccountBalance: async (accountAddress: string) => {
     try {
       let { data } = (await api.query.system.account(accountAddress)) as any;
@@ -26,10 +28,10 @@ const polkadotAPI = {
        * 2. Convert the planck amount to decimal amount
        */
       const balanceDecimal = toDecimal(data.free, api);
-      log.info('[Polkadot API] Initial balance: ', balanceDecimal);
+      log.info('[ws] Initial balance: ', balanceDecimal);
       return parseFloat(balanceDecimal);
     } catch (error) {
-      // Handle error (e.g., logging, throwing, etc.)
+      log.error('[ws] Error fetching account balance:', error);
       throw error;
     }
   },
@@ -41,7 +43,7 @@ const polkadotAPI = {
     return new Promise(async (resolve, reject) => {
       const injector = await web3FromAddress(fromAddress);
       log.info(
-        `Transfering ${decimalAmount} from: ${fromAddress} to: ${toAddress}`
+        `[ws] Transfering ${decimalAmount} from: ${fromAddress} to: ${toAddress}`
       );
       const planckAmount = toPlanckUnit(decimalAmount, api);
       const tx = api.tx.balances.transferKeepAlive(toAddress, planckAmount);
@@ -49,22 +51,22 @@ const polkadotAPI = {
       tx.signAndSend(fromAddress, { signer: injector.signer }, ({ status }) => {
         if (status.isInBlock) {
           log.info(
-            `[Polkadot API] Completed at block hash#'${status.asInBlock.toString()}`
+            `[ws] Completed at block hash#'${status.asInBlock.toString()}`
           );
           resolve(status.asInBlock.toString()); // Resolve with block hash
         } else if (status.isFinalized) {
           // If you want to handle finalized status separately
           log.info(
-            `[Polkadot API] Transaction finalized at block hash#'${status.asFinalized.toString()}`
+            `[ws] Transaction finalized at block hash#'${status.asFinalized.toString()}`
           );
         } else if (status.isDropped || status.isInvalid) {
           reject(new Error(`Transaction failed with status: ${status.type}`));
         } else {
-          log.info(`[Polkadot API] Current status: ${status.type}`);
+          log.info(`[ws] Current status: ${status.type}`);
         }
       }).catch((error) => {
         if (error instanceof Error) {
-          log.info('[Polkadot API] Transaction failed', error);
+          log.info('[ws] Transaction failed', error);
           reject(error); // Reject with the error object
         }
       });
@@ -72,4 +74,4 @@ const polkadotAPI = {
   },
 };
 
-export { polkadotAPI };
+export { wsAPI };

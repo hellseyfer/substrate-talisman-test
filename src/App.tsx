@@ -5,7 +5,11 @@ import Transfer from './app/features/transactions/Transfer';
 import { ChakraProvider, StackDivider, VStack } from '@chakra-ui/react';
 import { Heading } from '@chakra-ui/react';
 import log from 'loglevel';
+import { initializeApi } from './app/features/ws/wsAPI';
+
 log.setLevel('debug');
+await initializeApi();
+
 function App() {
   return (
     <ChakraProvider>

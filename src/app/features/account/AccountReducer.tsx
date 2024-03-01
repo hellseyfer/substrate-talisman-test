@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { RootState } from '../../redux/store';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { polkadotAPI } from '../polkadot/polkadotAPI';
+import { wsAPI } from '../ws/wsAPI';
 
 interface AccountsState {
   accounts: InjectedAccountWithMeta[];
@@ -30,7 +30,7 @@ export const fetchBalance = createAsyncThunk(
   'accounts/fetchBalance',
   async (accountId: string, thunkAPI) => {
     try {
-      const response = await polkadotAPI.fetchAccountBalance(accountId);
+      const response = await wsAPI.fetchAccountBalance(accountId);
       return response;
     } catch (error) {
       // Handle the error or rethrow it
@@ -42,13 +42,8 @@ export const fetchBalance = createAsyncThunk(
 export const signTransaction = createAsyncThunk(
   'accounts/signTransaction',
   async ({ fromAddress, toAddress, amount }: SignTransaction, thunkAPI) => {
-    try {
-      await polkadotAPI.signTx(fromAddress, toAddress, amount);
-      await thunkAPI.dispatch(fetchBalance(fromAddress));
-    } catch (error) {
-      // Handle the error or rethrow it
-      throw error;
-    }
+    await wsAPI.signTx(fromAddress, toAddress, amount);
+    await thunkAPI.dispatch(fetchBalance(fromAddress));
   }
 );
 
@@ -68,7 +63,6 @@ const accountsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchBalance.fulfilled, (state, action) => {
-      // Add user to the state array
       state.selectedAccountBalance = action.payload;
     });
   },
