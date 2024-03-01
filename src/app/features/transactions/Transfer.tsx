@@ -69,12 +69,7 @@ const Transfer = () => {
             />
             {errors.amount && <span color="red.200">Not a valid amount</span>}
           </VStack>
-          <Button
-            variant="outline"
-            _hover={{ bg: 'black', color: 'white' }}
-            type="submit"
-            disabled={!selectedAccountId}
-          >
+          <Button variant="primary" type="submit" disabled={!selectedAccountId}>
             Send
           </Button>
         </HStack>
