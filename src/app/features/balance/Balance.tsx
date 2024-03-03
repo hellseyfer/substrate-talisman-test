@@ -1,7 +1,10 @@
 import { Text } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect } from 'react';
-import { fetchBalance } from '../account/AccountReducer';
+import {
+  fetchBalance,
+  subscribeToBalanceChanges,
+} from '../account/AccountReducer';
 
 const Balance = () => {
   const dispatch = useAppDispatch();
@@ -14,7 +17,7 @@ const Balance = () => {
 
   useEffect(() => {
     if (!selectedAccountId) return;
-    dispatch(fetchBalance(selectedAccountId));
+    dispatch(subscribeToBalanceChanges(selectedAccountId));
   }, [selectedAccountId]);
 
   return (

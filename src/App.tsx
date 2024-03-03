@@ -1,5 +1,5 @@
 import './App.css';
-import ExtensionInfo from './app/features/extension/ExtensionInfo';
+import ExtensionInfo from './app/features/account/Extension';
 import AccountSelector from './app/features/account/AccountSelector';
 import Transfer from './app/features/transactions/Transfer';
 import { StackDivider, VStack } from '@chakra-ui/react';

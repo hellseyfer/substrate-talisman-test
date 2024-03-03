@@ -64,7 +64,7 @@ const Transfer = () => {
               {...register('amount', {
                 required: true,
                 min: 0,
-                max: selectedAccountBalance,
+                max: selectedAccountBalance ?? 0,
               })}
             />
             {errors.amount && <span color="red.200">Not a valid amount</span>}

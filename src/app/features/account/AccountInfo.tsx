@@ -7,9 +7,7 @@ const AccountInfo = () => {
     (state) => state.accounts.selectedAccountId
   );
   const selectedAccount = useAppSelector((state) =>
-    state.accounts.accounts.find(
-      (account) => account.address === selectedAccountId
-    )
+    state.accounts.addresses.find((a) => a.address === selectedAccountId)
   );
 
   return (

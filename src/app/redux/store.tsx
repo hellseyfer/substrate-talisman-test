@@ -1,13 +1,11 @@
 // src/app/store.js
 
 import { configureStore } from '@reduxjs/toolkit';
-import extensionReducer from '../features/extension/extensionReducer';
 import accountReducer from '../features/account/AccountReducer';
 import logger from 'redux-logger';
 export const store = configureStore({
   reducer: {
     accounts: accountReducer,
-    extension: extensionReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   // Other configuration options
