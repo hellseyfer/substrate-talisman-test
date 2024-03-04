@@ -1,10 +1,16 @@
+'use client';
 import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setSelectedAccount, setAccounts } from './AccountReducer';
-import AccountInfo from './AccountInfo';
+import {
+  setSelectedAccount,
+  setAccounts,
+  setJwtToken,
+  setSignedInWith,
+} from '@/app/lib/features/accounts/accountSlice';
 import { web3Accounts } from '@polkadot/extension-dapp';
 import { Heading, Select, VStack, Text, Box, Button } from '@chakra-ui/react';
-import { SignIn } from './SignIn';
+import SignIn from './SignIn';
+import { useAppDispatch, useAppSelector } from '@/app/lib/hooks';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
 const AccountSelector: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -29,6 +35,14 @@ const AccountSelector: React.FC = () => {
 
   const onCancel = () => {
     dispatch(setSelectedAccount(undefined));
+  };
+
+  const handleSignedIn = (
+    selectedAccount: InjectedAccountWithMeta,
+    jwtToken: string
+  ) => {
+    dispatch(setJwtToken(jwtToken));
+    dispatch(setSignedInWith(selectedAccount));
   };
 
   return (
@@ -75,16 +89,10 @@ const AccountSelector: React.FC = () => {
         </VStack>
         <VStack spacing="3">
           {accounts && (
-            <SignIn
-              accounts={accounts}
-              onCancel={() => dispatch(setAccounts(undefined))}
-              onSignedIn={onCancel()}
-            />
+            <SignIn onCancel={onCancel} onSignedIn={handleSignedIn} />
           )}
         </VStack>
       </VStack>
-
-      <AccountInfo></AccountInfo>
     </>
   );
 };

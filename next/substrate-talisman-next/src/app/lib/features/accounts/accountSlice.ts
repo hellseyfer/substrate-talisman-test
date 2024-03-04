@@ -4,16 +4,18 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { RootState } from '../../redux/store';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { wsAPI } from '../../../services/wsAPI';
-
+import { RootState } from '../../store';
+import { createAppSlice } from '@/app/lib/createAppSlice';
+import { wsAPI } from './wsAPI';
 interface AccountsState {
   accounts: InjectedAccountWithMeta[] | undefined;
   selectedAccount: InjectedAccountWithMeta | undefined;
   selectedAccountBalance?: number | undefined;
   connectingExtension: boolean;
   extension?: string | undefined;
+  jwtToken?: string;
+  signedInWith?: InjectedAccountWithMeta;
 }
 
 interface SignTransaction {
@@ -28,6 +30,8 @@ const initialState: AccountsState = {
   selectedAccountBalance: undefined,
   connectingExtension: false,
   extension: undefined,
+  jwtToken: undefined,
+  signedInWith: undefined,
 };
 
 export const fetchBalance = createAsyncThunk(
@@ -92,7 +96,7 @@ export const subscribeToBalanceChanges = createAsyncThunk(
   }
 );
 
-const accountsSlice = createSlice({
+export const accountsSlice = createAppSlice({
   name: 'acc',
   initialState,
   reducers: {
@@ -113,6 +117,15 @@ const accountsSlice = createSlice({
     },
     setSelectedAccountBalance: (state, action: PayloadAction<number>) => {
       state.selectedAccountBalance = action.payload;
+    },
+    setJwtToken: (state, action: PayloadAction<string>) => {
+      state.jwtToken = action.payload;
+    },
+    setSignedInWith: (
+      state,
+      action: PayloadAction<InjectedAccountWithMeta>
+    ) => {
+      state.signedInWith = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -139,6 +152,10 @@ const accountsSlice = createSlice({
   },
 });
 
-export const { setAccounts, setSelectedAccount, setSelectedAccountBalance } =
-  accountsSlice.actions;
-export default accountsSlice.reducer;
+export const {
+  setAccounts,
+  setSelectedAccount,
+  setSelectedAccountBalance,
+  setJwtToken,
+  setSignedInWith,
+} = accountsSlice.actions;

@@ -6,7 +6,7 @@ import { store } from './app/redux/store.tsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
 import log from 'loglevel';
-import { initializeApi } from './app/features/ws/wsAPI';
+import { initializeApi } from './services/wsAPI.ts';
 
 log.setLevel('debug');
 await initializeApi();

@@ -1,6 +1,7 @@
-import { useAppSelector } from '../../redux/hooks';
+"use client";
 import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import Balance from '../balance/Balance';
+import { useAppSelector } from '@/app/lib/hooks';
 
 const AccountInfo = () => {
   const selectedAccount = useAppSelector((state) => state.acc.selectedAccount);

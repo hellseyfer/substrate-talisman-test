@@ -1,5 +1,6 @@
+'use server';
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { toDecimal, toPlanckUnit } from '../../utils/unitConversion';
+import { toDecimal, toPlanckUnit } from './utils/unitConversion';
 import {
   web3Accounts,
   web3AccountsSubscribe,
@@ -9,7 +10,7 @@ import {
 import log from 'loglevel';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
-const WS_URL = import.meta.env.VITE_WS_URL;
+const WS_URL = 'wss://westend-rpc.polkadot.io';
 const provider = new WsProvider(WS_URL);
 
 let api: ApiPromise;
@@ -99,7 +100,7 @@ const wsAPI = {
     );
   },
   subscribeToExtensionChanges: async (
-    addresses: InjectedAccountWithMeta[],
+    addresses: InjectedAccountWithMeta[] | undefined,
     callback: (accounts: any) => void
   ) => {
     if (addresses === undefined) return;

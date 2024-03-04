@@ -1,6 +1,7 @@
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+'use client';
 import { Button, Text } from '@chakra-ui/react';
-import { connectWallet } from './AccountReducer';
+import { connectWallet } from '@/app/lib/features/accounts/accountSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/hooks';
 
 const ExtensionInfo = () => {
   const { extension, connectingExtension } = useAppSelector(
@@ -8,7 +9,7 @@ const ExtensionInfo = () => {
   );
   const dispatch = useAppDispatch();
 
-  const handlerConnectExtension = async () => {
+  const handlerConnectExtension = () => {
     dispatch(connectWallet());
   };
 

@@ -1,10 +1,8 @@
+'use client';
 import { Text } from '@chakra-ui/react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect } from 'react';
-import {
-  fetchBalance,
-  subscribeToBalanceChanges,
-} from '../account/AccountReducer';
+import { subscribeToBalanceChanges } from '@/app/lib/features/accounts/accountSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/hooks';
 
 const Balance = () => {
   const dispatch = useAppDispatch();

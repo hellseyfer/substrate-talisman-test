@@ -1,7 +1,8 @@
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+'use client';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Input, Button, Heading, HStack, VStack } from '@chakra-ui/react';
-import { signTransaction } from '../account/AccountReducer';
+import { signTransaction } from '@/app/lib/features/accounts/accountSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/hooks';
 type Inputs = {
   addressTo: string;
   amount: number;

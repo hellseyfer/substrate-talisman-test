@@ -5,7 +5,7 @@ import accountReducer from '../features/account/AccountReducer';
 import logger from 'redux-logger';
 export const store = configureStore({
   reducer: {
-    accounts: accountReducer,
+    acc: accountReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   // Other configuration options
