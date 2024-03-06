@@ -7,11 +7,9 @@ import Transfer from './features/transactions/Transfer';
 import { Heading } from '@chakra-ui/react';
 import { useAppSelector } from './lib/hooks';
 import { Divider } from '@chakra-ui/react';
-import { wsAPI } from './lib/features/accounts/wsAPI';
-import SignInContainer from './features/SignIn/SignInContainer';
+import SignInContainer from './features/signIn/SignInContainer';
 export default function Home() {
   const jwtToken = useAppSelector((state) => state.acc.jwtToken);
-  //wsAPI.initializeApi();
   return (
     <main className={styles.main}>
       <Heading as="p" fontSize="5xl">
